@@ -23,7 +23,7 @@ router.get("/", getUsers);
 // GET a single user
 router.get("/:id", getUser);
 
-// POST a new user (register)
+// POST a new user (Create-test)
 router.post("/create", createUser);
 
 // DELETE a user

@@ -1,19 +1,37 @@
 const { create } = require("../models/userModel");
-const Users = require("../models/userModel");
+const User = require("../models/userModel");
 const mongoose = require("mongoose");
+const jwt = require("jsonwebtoken");
 
+const createToken = (_id) => {
+    return jwt.sign({ _id }, process.env.SECRET_KEY, { expiresIn: "2d" });
+};
 // Login User
 const loginUser = async (req, res) => {
-    res.json({
-        msg: "login user",
-    });
+    const { email, password } = req.body;
+    try {
+        const user = await User.login(email, password);
+        // create a token
+        const token = createToken(user._id);
+
+        res.status(200).json({ email, token });
+    } catch (error) {
+        res.status(400).json({ error: error.message });
+    }
 };
 
 // Register User
 const registerUser = async (req, res) => {
-    res.json({
-        msg: "register user",
-    });
+    const { email, password } = req.body;
+    try {
+        const user = await User.register(email, password);
+        // create a token
+        const token = createToken(user._id);
+
+        res.status(200).json({ email, token });
+    } catch (error) {
+        res.status(400).json({ error: error.message });
+    }
 };
 
 // Get a single user
